@@ -10,6 +10,16 @@ services:
       - ./backend:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
+  db:
+    image: postgres:15.4
+    ports:
+      - "5432:5432"  # Adjust the port as needed
+    environment:
+      POSTGRES_DB: dinner_db
+      POSTGRES_USER: dinner_user
+      POSTGRES_PASSWORD: secret_password
+
+
   frontend:
     build:
       context: ./frontend
