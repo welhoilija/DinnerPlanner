@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class ReservationCreate(BaseModel):
     restaurant_name: str
     description: str
+    datetime: str
 
 
 class ReservationList(BaseModel):

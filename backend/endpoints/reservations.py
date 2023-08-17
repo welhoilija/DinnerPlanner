@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 from models.models import Reservation
-from schemas import ReservationCreate, ReservationListResponse
+from schemas import ReservationCreate, ReservationListResponse, ReservationList
+
 
 router = APIRouter()
 
@@ -19,4 +20,16 @@ async def create_reservation(request: ReservationCreate, db: Session = Depends(g
 @router.get("/list_reservations/", response_model=ReservationListResponse)
 async def list_reservations(db: Session = Depends(get_db)):
     reservations = db.query(Reservation).all()
-    return ReservationListResponse(reservations=reservations)
+
+    reservation_list = [
+        ReservationList(
+            id=res.id,
+            restaurant_name=res.restaurant_name,
+            datetime=res.datetime.strftime(
+                '%Y-%m-%d %H:%M:%S'),
+            description=res.description,
+        )
+        for res in reservations
+    ]
+
+    return ReservationListResponse(reservations=reservation_list)

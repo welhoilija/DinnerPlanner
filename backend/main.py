@@ -4,8 +4,25 @@ from models.models import Base
 from database import engine
 from endpoints import reservations
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
-app.include_router(reservations.router, prefix="/reservation", tags=["reservation"])
+origins = [
+    "http://0.0.0.0:3000",  # or the FQDN in prod
+    "http://0.0.0.0:3000/",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# Need to check before prod
+
+app.include_router(reservations.router,
+                   prefix="/reservation", tags=["reservation"])
 
 Base.metadata.create_all(bind=engine)
