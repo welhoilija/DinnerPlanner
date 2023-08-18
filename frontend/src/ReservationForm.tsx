@@ -1,9 +1,12 @@
-// ReservationForm.tsx
 import React, { useState } from 'react'
 import { createReservation } from './api'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-
+import DateTimePicker from 'react-datetime-picker'
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
+import './datetimepicker.scss';
 interface ReservationFormProps {
   onReservationCreated: () => void
 }
@@ -11,6 +14,7 @@ interface ReservationFormProps {
 const ReservationForm: React.FC<ReservationFormProps> = ({ onReservationCreated }) => {
   const [restaurantName, setRestaurantName] = useState('')
   const [description, setDescription] = useState('')
+  const [dateTime, setDateTime] = useState<Date | null>(new Date())
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -18,17 +22,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onReservationCreated 
       await createReservation({
         restaurant_name: restaurantName,
         description: description,
-        datetime: new Date().toDateString(),
+        datetime: dateTime ? dateTime.toISOString() : '',
       })
 
-      // Call the callback function to inform the parent component that a reservation has been created
       onReservationCreated()
 
-      // Clear the form fields
       setRestaurantName('')
       setDescription('')
+      setDateTime(null)
     } catch (error) {
-      // Handle error
+      // Handle
     }
   }
 
@@ -43,6 +46,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onReservationCreated 
             value={restaurantName}
             onChange={(e) => setRestaurantName(e.target.value)}
             required
+            style={{ backgroundColor: '#333', color: '#fff' }}
           />
         </Form.Group>
         <Form.Group controlId="description">
@@ -52,6 +56,15 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onReservationCreated 
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
+            style={{ backgroundColor: '#333', color: '#fff' }}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Date and Time</Form.Label>
+          <DateTimePicker
+            onChange={(value) => setDateTime(value)}
+            value={dateTime}
+            format="y-MM-dd HH:mm:ss"
           />
         </Form.Group>
         <Button variant="primary" type="submit">
