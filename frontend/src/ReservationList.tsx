@@ -3,6 +3,8 @@ import { fetchReservations } from './api'
 import ReservationForm from './ReservationForm'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card';
+import './ReservationList.scss';
 
 interface Reservation {
   id: number
@@ -69,23 +71,37 @@ const ReservationList: React.FC = () => {
         </Modal.Body>
       </Modal>
       <h2>Future Reservations</h2>
-      <ul>
+      <ul className="list-unstyled">
         {futureReservations.map(reservation => (
           <li key={reservation.id}>
-            <p>Restaurant: {reservation.restaurant_name}</p>
-            <p>Date and Time: {reservation.datetime}</p>
-            <p>Description: {reservation.description}</p>
+            <Card bg="dark" text="white">
+              <Card.Body>
+                <Card.Title>{reservation.restaurant_name}</Card.Title>
+                <Card.Subtitle className="mb-2">
+                  Date and Time: {reservation.datetime}
+                </Card.Subtitle>
+                <Card.Text>{reservation.description}</Card.Text>
+              </Card.Body>
+            </Card>
           </li>
         ))}
       </ul>
+
       <hr />
+
       <h2>Past Reservations</h2>
-      <ul>
+      <ul className="list-unstyled">
         {pastReservations.map(reservation => (
           <li key={reservation.id}>
-            <p>Restaurant: {reservation.restaurant_name}</p>
-            <p>Date and Time: {reservation.datetime}</p>
-            <p>Description: {reservation.description}</p>
+            <Card bg="dark" text="white">
+              <Card.Body>
+                <Card.Title>{reservation.restaurant_name}</Card.Title>
+                <Card.Subtitle className="mb-2">
+                  Date and Time: {reservation.datetime}
+                </Card.Subtitle>
+                <Card.Text>{reservation.description}</Card.Text>
+              </Card.Body>
+            </Card>
           </li>
         ))}
       </ul>

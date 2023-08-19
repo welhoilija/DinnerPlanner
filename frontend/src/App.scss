@@ -2,11 +2,14 @@
   text-align: center;
 }
 .modal-content {
-  background-color: rgba(0, 4, 41, 0.9) !important; // Dark gray with some transparency
+  background-color: rgba(0, 4, 41, 0.9) !important;
 }
 .CreateReservation {
   display: flex;
   height: 100px;
   justify-content: center;
   align-items: center;
+}
+.date-time {
+  color: #ffffff !important;
 }

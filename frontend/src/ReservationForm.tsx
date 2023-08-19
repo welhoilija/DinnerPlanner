@@ -37,7 +37,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ onReservationCreated 
 
   return (
     <div>
-      <h2>Create Reservation</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="restaurantName">
           <Form.Label>Restaurant Name:</Form.Label>
