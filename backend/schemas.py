@@ -1,18 +1,28 @@
-from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
 
 
-class ReservationCreate(BaseModel):
+@dataclass
+class ReservationCreate:
     restaurant_name: str
     description: str
     datetime: str
 
 
-class ReservationList(BaseModel):
+@dataclass
+class ReservationList:
     id: int
     restaurant_name: str
     datetime: str
     description: str
 
 
-class ReservationListResponse(BaseModel):
+@dataclass
+class ReservationListResponse:
     reservations: list[ReservationList]
+
+
+@dataclass
+class ReviewCreate:
+    reservation_id: int
+    stars: int
+    comment: str
