@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from models.models import Base
 from database import engine
 from endpoints import reservations
+from endpoints import reviews
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -24,5 +25,6 @@ app.add_middleware(
 
 app.include_router(reservations.router,
                    prefix="/reservation", tags=["reservation"])
+app.include_router(reviews.router, prefix="/review", tags=["review"])
 
 Base.metadata.create_all(bind=engine)
