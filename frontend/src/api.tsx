@@ -13,11 +13,10 @@ interface ReservationsResponse {
 }
 
 const instance = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || '/ANAALi',
+    baseURL: process.env.REACT_APP_API_URL || '/',
     timeout: 10000,
 })
 
-console.log('Base URL:', process.env)
 
 export async function fetchReservations(): Promise<Reservation[]> {
   try {
@@ -41,6 +40,16 @@ export async function createReservation(reservationData: {
       console.error('Error creating reservation:', error)
       throw error
     }
+}
+
+export async function removeReservation(reservationId: number): Promise<{ message: string }> {
+  try {
+    const response = await instance.delete('/reservation/', { data: { id: reservationId } })
+    return response.data
+  } catch (error) {
+    console.error('Error removing reservation:', error)
+    throw error
+  }
 }
 
 export default instance

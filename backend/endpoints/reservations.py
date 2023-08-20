@@ -1,9 +1,12 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from database import get_db
-from models.models import Reservation, Review as DBReview
-from schemas import ReservationSchema, ReservationListResponse, ReservationList, Review
 from dataclasses import asdict
+
+from database import get_db
+from fastapi import APIRouter, Depends, HTTPException
+from models.models import Reservation
+from models.models import Review as DBReview
+from schemas import (ReservationId, ReservationList, ReservationListResponse,
+                     ReservationSchema, Review)
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -15,6 +18,18 @@ async def create_reservation(request: ReservationSchema, db: Session = Depends(g
     db.commit()
     db.refresh(db_reservation)
     return {"message": "Reservation created successfully"}
+
+
+@router.delete("/")
+async def delete_reservation(request: ReservationId, db: Session = Depends(get_db)):
+    reservation = db.query(Reservation).get(request.id)
+
+    if reservation:
+        db.delete(reservation)
+        db.commit()
+        return None
+    else:
+        return HTTPException(status_code=404, detail={"message": "Reservation not found"})
 
 
 @router.get("/list_reservations/", response_model=ReservationListResponse)

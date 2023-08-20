@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { fetchReservations } from './api'
+import { fetchReservations, removeReservation } from './api'
 import ReservationForm from './ReservationForm'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card';
-import './ReservationList.scss';
+import Card from 'react-bootstrap/Card'
+import './ReservationList.scss'
 
 interface Reservation {
   id: number
@@ -35,6 +35,16 @@ const ReservationList: React.FC = () => {
     fetchData()
     closeModal()
   }
+
+  const handleRemoveReservation = async (reservationId: number) => {
+    try {
+      await removeReservation(reservationId)
+      fetchData()
+    } catch (error) {
+      console.error('Error removing reservation:', error);
+    }
+  }
+  
 
   const openModal = () => {
     setIsModalOpen(true)
@@ -81,6 +91,9 @@ const ReservationList: React.FC = () => {
                   Date and Time: {reservation.datetime}
                 </Card.Subtitle>
                 <Card.Text>{reservation.description}</Card.Text>
+                <Button variant="danger" onClick={() => handleRemoveReservation(reservation.id)}>
+                  Remove
+                </Button>
               </Card.Body>
             </Card>
           </li>
@@ -100,6 +113,9 @@ const ReservationList: React.FC = () => {
                   Date and Time: {reservation.datetime}
                 </Card.Subtitle>
                 <Card.Text>{reservation.description}</Card.Text>
+                <Button variant="danger" onClick={() => handleRemoveReservation(reservation.id)}>
+                  Remove
+                </Button>
               </Card.Body>
             </Card>
           </li>

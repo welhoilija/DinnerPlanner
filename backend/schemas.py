@@ -25,5 +25,10 @@ class ReservationList:
 
 
 @dataclass
+class ReservationId:
+    id: int
+
+
+@dataclass
 class ReservationListResponse:
     reservations: list[ReservationList]
