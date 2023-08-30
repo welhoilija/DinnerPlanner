@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { fetchReservations, removeReservation } from './api'
+import { fetchReservations, removeReservation, Review } from './api'
 import ReservationForm from './ReservationForm'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -13,6 +13,7 @@ interface Reservation {
   datetime: string
   description: string
   user_id: number
+  reviews: Review[]
 }
 
 const ReservationList: React.FC = () => {
@@ -135,6 +136,19 @@ const ReservationList: React.FC = () => {
                 <Button variant="danger" onClick={() => handleRemoveReservation(reservation.id)}>
                   Remove
                 </Button>
+                <Card.Subtitle className='mb-3 p-3'>
+                  Reviews
+                </Card.Subtitle>
+                <div className="d-flex flex-row flex-wrap">
+                  {reservation.reviews.map((review: Review) => (
+                    <Card key={review.reservation_id} className="m-2 bg-dark text-white">
+                      <Card.Body>
+                        <Card.Text>Stars: {review.stars}</Card.Text>
+                        <Card.Text>Comment: {review.comment}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </div>
                 <div className='CreateReservation'>
                   <Button variant="primary" onClick={() => openReviewModal(reservation.id)}>
                   Write Review

@@ -6,6 +6,7 @@ interface Reservation {
   datetime: string
   description: string
   user_id: number
+  reviews: Review[]
 }
 
 interface ReservationsResponse {
