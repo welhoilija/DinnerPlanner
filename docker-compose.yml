@@ -2,12 +2,15 @@ version: '3'
 services:
   db:
     image: postgres:15.4
+    container_name: db
     ports:
       - "5432:5432"
     environment:
       POSTGRES_DB: dinner_db
       POSTGRES_USER: dinner_user
       POSTGRES_PASSWORD: secret_password
+    volumes:
+    - pg_data:/var/lib/postgresql/data
 
   backend:
     build:
@@ -36,3 +39,6 @@ services:
     volumes:
       - ./frontend:/app
     command: npm start
+
+volumes:
+  pg_data:
