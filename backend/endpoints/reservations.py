@@ -40,7 +40,7 @@ async def list_reservations(db: Session = Depends(get_db)):
     for res in reservations:
         reviews = db.query(DBReview).filter_by(reservation_id=res.id).all()
         review_list = [
-            Review(id=review.id, stars=review.stars, comment=review.comment)
+            Review(reservation_id=review.id, stars=review.stars, comment=review.comment)
             for review in reviews
         ]
 

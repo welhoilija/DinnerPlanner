@@ -32,6 +32,7 @@ class Reservation(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     user = relationship("User", back_populates="reservations")
+    reviews = relationship("Review", back_populates="reservation")
 
 
 class Review(Base):
@@ -41,3 +42,5 @@ class Review(Base):
     reservation_id = Column(Integer, ForeignKey('reservations.id'), nullable=False)
     stars = Column(Integer, nullable=False)
     comment = Column(String)
+
+    reservation = relationship("Reservation", back_populates="reviews")

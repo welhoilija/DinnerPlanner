@@ -13,3 +13,9 @@ __pycache__/
 
 # Temporary files
 *.swp
+
+# Alembic configuration
+alembic.ini
+alembic/env.py
+
+# Alembic migration scripts (keep the directory, but not individual files)
