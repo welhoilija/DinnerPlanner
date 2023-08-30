@@ -17,5 +17,6 @@ __pycache__/
 # Alembic configuration
 alembic.ini
 alembic/env.py
-
+alembic/README
+alembic/script.py.mako
 # Alembic migration scripts (keep the directory, but not individual files)
