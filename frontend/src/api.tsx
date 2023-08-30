@@ -12,6 +12,12 @@ interface ReservationsResponse {
   reservations: Reservation[]
 }
 
+export interface Review {
+  reservation_id: number
+  stars: number
+  comment: string
+}
+
 const instance = axios.create({
     baseURL: process.env.REACT_APP_API_URL || '/',
     timeout: 10000,
@@ -48,6 +54,16 @@ export async function removeReservation(reservationId: number): Promise<{ messag
     return response.data
   } catch (error) {
     console.error('Error removing reservation:', error)
+    throw error
+  }
+}
+
+export async function createReview(review: Review): Promise<{ message: string }> {
+  try {
+    const response = await instance.post('/review/', review)
+    return response.data
+  } catch (error) {
+    console.error('Error creating review:', error)
     throw error
   }
 }

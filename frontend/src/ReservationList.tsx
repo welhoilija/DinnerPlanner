@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import './ReservationList.scss'
+import ReviewForm from './ReviewForm'
 
 interface Reservation {
   id: number
@@ -64,6 +65,24 @@ const ReservationList: React.FC = () => {
     reservation => new Date(reservation.datetime) < currentDate
   )
 
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedReservationId, setSelectedReservationId] = useState<number | null>(null);
+
+  const openReviewModal = (reservationId: number) => {
+    setSelectedReservationId(reservationId);
+    setIsReviewModalOpen(true);
+  };
+
+  const closeReviewModal = () => {
+    setSelectedReservationId(null);
+    setIsReviewModalOpen(false);
+  };
+
+  const handleReviewCreated = () => {
+    fetchData()
+    closeReviewModal()
+  }
+
   return (
     <div>
       <div className='CreateReservation'>
@@ -116,6 +135,24 @@ const ReservationList: React.FC = () => {
                 <Button variant="danger" onClick={() => handleRemoveReservation(reservation.id)}>
                   Remove
                 </Button>
+                <div className='CreateReservation'>
+                  <Button variant="primary" onClick={() => openReviewModal(reservation.id)}>
+                  Write Review
+                  </Button>
+                </div>
+
+                <Modal show={isReviewModalOpen} onHide={closeReviewModal} className="modal">
+                  <Modal.Header closeButton>
+                    <Modal.Title>Write a review</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ReviewForm
+                      reservationId={reservation.id}
+                      onReviewCreated={handleReviewCreated}
+                      onClose={closeReviewModal}
+                    />
+                  </Modal.Body>
+                </Modal>
               </Card.Body>
             </Card>
           </li>
