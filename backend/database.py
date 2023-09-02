@@ -1,7 +1,21 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+import os
+import logging
 
-DATABASE_URL = "postgresql://dinner_user:secret_password@db:5432/dinner_db"
+
+DB_USER = os.environ.get("POSTGRES_USER")
+DB_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+DB_HOST = os.environ.get("POSTGRES_HOST", "db")
+DB_PORT = os.environ.get("POSTGRES_PORT", "5432")
+DB_NAME = os.environ.get("POSTGRES_DB")
+
+logging.warning(f"DB_USER: {DB_USER}")
+logging.warning(f"DB_PASSWORD: {DB_PASSWORD}")
+logging.warning(f"DB_HOST: {DB_HOST}")
+logging.warning(f"DB_PORT: {DB_PORT}")
+logging.warning(f"DB_NAME: {DB_NAME}")
+DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(DATABASE_URL)
 
