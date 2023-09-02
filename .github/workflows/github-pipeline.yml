@@ -23,15 +23,15 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Build and push Docker images for Frontend
-        working-directory: ./frontend
+        working-directory: .
         run: |
-          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-frontend .
+          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-frontend ./frontend
           docker push eu.gcr.io/dinner-app-397715/dinnerproject-frontend
 
       - name: Build and push Docker images for Backend
-        working-directory: ./backend
+        working-directory: .
         run: |
-          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-backend .
+          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-backend ./backend
           docker push eu.gcr.io/dinner-app-397715/dinnerproject-backend
 
       - name: Deploy Cloud Run services
