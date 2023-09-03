@@ -20,7 +20,7 @@ export interface Review {
 }
 
 const instance = axios.create({
-  baseURL: `http://${process.env.REACT_APP_API_URL}`,
+  baseURL: process.env.REACT_APP_API_URL,
   timeout: 10000,
 })
 

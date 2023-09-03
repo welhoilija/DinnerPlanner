@@ -33,3 +33,13 @@ jobs:
         run: |
           docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-backend ./backend
           docker push eu.gcr.io/dinner-app-397715/dinnerproject-backend
+      - id: 'deploy backend'
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: 'backend'
+          image: 'eu.gcr.io/dinner-app-397715/dinnerproject-backend'
+      - id: 'deploy frontend'
+        uses: 'google-github-actions/deploy-cloudrun@v1'
+        with:
+          service: 'frontend'
+          image: 'eu.gcr.io/dinner-app-397715/dinnerproject-frontend'
