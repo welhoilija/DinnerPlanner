@@ -18,7 +18,7 @@ if INSTANCE_CONNECTION_NAME:
         DB_NAME = parts[2]
     else:
         # Handle the case where INSTANCE_CONNECTION_NAME is not in the expected format
-        raise ValueError("Invalid INSTANCE_CONNECTION_NAME format")
+        raise ValueError(f"Invalid INSTANCE_CONNECTION_NAME format {INSTANCE_CONNECTION_NAME}")
 elif not DB_HOST and not DB_NAME:
     # Handle the case where INSTANCE_CONNECTION_NAME is not set
     raise ValueError("NO INSTANCE CONNECTION OR DB NAME/HOST")
