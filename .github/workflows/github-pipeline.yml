@@ -25,21 +25,22 @@ jobs:
       - name: Build and push Docker images for Frontend
         working-directory: .
         run: |
-          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-frontend ./frontend
-          docker push eu.gcr.io/dinner-app-397715/dinnerproject-frontend
+          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }} ./frontend
+          docker push eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }}
 
       - name: Build and push Docker images for Backend
         working-directory: .
         run: |
-          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-backend ./backend
-          docker push eu.gcr.io/dinner-app-397715/dinnerproject-backend
-      - name: 'deploy backend'
-        uses: 'google-github-actions/deploy-cloudrun@v1'
-        with:
-          service: 'backend'
-          image: 'eu.gcr.io/dinner-app-397715/dinnerproject-backend'
-      - name: 'deploy frontend'
-        uses: 'google-github-actions/deploy-cloudrun@v1'
-        with:
-          service: 'frontend'
-          image: 'eu.gcr.io/dinner-app-397715/dinnerproject-frontend'
+          docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-backend:${{ github.sha }} ./backend
+          docker push eu.gcr.io/dinner-app-397715/dinnerproject-backend:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy backend \
+            --image=eu.gcr.io/dinner-app-397715/dinnerproject-backend:${{ github.sha }} \
+            --platform=managed \
+            --region=europe-north1
+          gcloud run deploy frontend \
+            --image=eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }} \
+            --platform=managed \
+            --region=europe-north1
