@@ -33,25 +33,3 @@ jobs:
         run: |
           docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-backend ./backend
           docker push eu.gcr.io/dinner-app-397715/dinnerproject-backend
-
-      - name: Deploy Cloud Run services
-        run: |
-          gcloud run deploy dinner-frontend \
-            --max-instances=1 \
-            --min-instances=0 \
-            --image eu.gcr.io/dinner-app-397715/dinnerproject-frontend \
-            --region europe-north1 \
-            --platform managed \
-            --cpu=1 \
-            --allow-unauthenticated
-
-          gcloud run deploy dinner-backend \
-            --max-instances=1 \
-            --min-instances=0 \
-            --image eu.gcr.io/dinner-app-397715/dinnerproject-backend \
-            --region europe-north1 \
-            --platform managed \
-            --add-cloudsql-instances=[dinner-app-db]
-            --allow-unauthenticated \
-            --cpu=1 \
-            --update-env-vars=[POSTGRES_USER=${{ secrets.POSTGRES_USER }},POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }},POSTGRES_DB=${{ secrets.POSTGRES_DB }}]
