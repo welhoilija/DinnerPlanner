@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 import sqlalchemy
 
 DB_USER = os.environ.get("DB_USER")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_PASS = os.environ.get("DB_PASS")
 DB_HOST = os.environ.get("DB_HOST") if os.environ.get("DB_HOST") else os.environ.get("INSTANCE_CONNECTION_NAME", None) # noqa E501
 DB_PORT = os.environ.get("DB_PORT", "5432")
 DB_NAME = os.environ.get("DB_NAME")
@@ -18,7 +18,7 @@ def connect_tcp_socket() -> sqlalchemy.engine.base.Engine:
     # keep secrets safe.
     db_host = DB_HOST
     db_user = DB_USER
-    db_pass = DB_PASSWORD
+    db_pass = DB_PASS
     db_name = DB_NAME
     db_port = DB_PORT
 
