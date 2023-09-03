@@ -12,29 +12,31 @@ DB_NAME = os.environ.get("DB_NAME")
 
 def connect_tcp_socket() -> sqlalchemy.engine.base.Engine:
     """Initializes a TCP connection pool for a Cloud SQL instance of Postgres."""
-    # Note: Saving credentials in environment variables is convenient, but not
-    # secure - consider a more secure solution such as
-    # Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
-    # keep secrets safe.
-    db_host = DB_HOST
-    db_user = DB_USER
-    db_pass = DB_PASS
-    db_name = DB_NAME
-    db_port = DB_PORT
-
-    pool = sqlalchemy.create_engine(
-        # Equivalent URL:
-        # postgresql+pg8000://<db_user>:<db_pass>@<db_host>:<db_port>/<db_name>
-        sqlalchemy.engine.url.URL.create(
-            drivername="postgresql+pg8000",
-            username=db_user,
-            password=db_pass,
-            host=db_host,
-            port=db_port,
-            database=db_name,
-        ),
-        # ...
-    )
+    if os.environ.get("INSTANCE_CONNECTION_NAME", None):
+        pool = sqlalchemy.create_engine(
+            # Equivalent URL:
+            # postgresql+pg8000://<db_user>:<db_pass>@<db_host>:<db_port>/<db_name>
+            sqlalchemy.engine.url.URL.create(
+                drivername="postgresql+pg8000",
+                username=DB_USER,
+                password=DB_PASS,
+                database=DB_NAME,
+                query={"unix_sock": f"{DB_HOST}/.s.PGSQL.5432"}
+            ),
+        )
+    else:
+        pool = sqlalchemy.create_engine(
+            # Equivalent URL:
+            # postgresql+pg8000://<db_user>:<db_pass>@<db_host>:<db_port>/<db_name>
+            sqlalchemy.engine.url.URL.create(
+                drivername="postgresql+pg8000",
+                username=DB_USER,
+                password=DB_PASS,
+                database=DB_NAME,
+                host=DB_HOST,
+                port=DB_PORT
+            ),
+        )
     return pool
 
 
