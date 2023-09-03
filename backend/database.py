@@ -5,9 +5,25 @@ import sqlalchemy
 
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_HOST = os.environ.get("DB_HOST", "db")
+DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = os.environ.get("DB_PORT", "5432")
 DB_NAME = os.environ.get("DB_NAME")
+
+INSTANCE_CONNECTION_NAME = os.environ.get("INSTANCE_CONNECTION_NAME", None)
+if INSTANCE_CONNECTION_NAME:
+    parts = INSTANCE_CONNECTION_NAME.split(":")
+    if len(parts) == 4:
+        DB_HOST = parts[3]
+        DB_PORT = "5432"  # Assuming a default PostgreSQL port
+        DB_NAME = parts[2]
+    else:
+        # Handle the case where INSTANCE_CONNECTION_NAME is not in the expected format
+        raise ValueError("Invalid INSTANCE_CONNECTION_NAME format")
+elif not DB_HOST and not DB_NAME:
+    # Handle the case where INSTANCE_CONNECTION_NAME is not set
+    raise ValueError("NO INSTANCE CONNECTION OR DB NAME/HOST")
+
+# Now you can use DB_HOST, DB_PORT, and DB_NAME for your database connection
 
 
 def connect_tcp_socket() -> sqlalchemy.engine.base.Engine:
