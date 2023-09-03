@@ -33,6 +33,10 @@ def connect_database() -> sqlalchemy.engine.base.Engine:
                 database=DB_NAME,
                 query={"unix_sock": f"/cloudsql/{DB_HOST}/.s.PGSQL.5432"}
             ),
+            pool_size=3,
+            max_overflow=3,
+            pool_timeout=10,
+            pool_recycle=1800,
         )
         logging.warning(f"postgresql+pg8000://{DB_USER}:{DB_PASS}@/{DB_NAME}?unix_sock={DB_HOST}/.s.PGSQL.5432") # noqa E501
     else:
