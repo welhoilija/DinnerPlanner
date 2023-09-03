@@ -28,7 +28,7 @@ def connect_database() -> sqlalchemy.engine.base.Engine:
                 username=DB_USER,
                 password=DB_PASS,
                 database=DB_NAME,
-                query={"unix_sock": f"{DB_HOST}/.s.PGSQL.5432"}
+                query={"unix_sock": f"/cloudsql/{DB_HOST}/.s.PGSQL.5432"}
             ),
         )
         logging.warning(f"postgresql+pg8000://{DB_USER}:{DB_PASS}@/{DB_NAME}?unix_sock={DB_HOST}/.s.PGSQL.5432") # noqa E501
