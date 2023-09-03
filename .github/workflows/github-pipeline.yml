@@ -35,11 +35,6 @@ jobs:
           docker push eu.gcr.io/dinner-app-397715/dinnerproject-backend
 
       - name: Deploy Cloud Run services
-      - id: 'deploy'
-        uses: 'google-github-actions/deploy-cloudrun@v1'
-        with:
-          service: 'hello-cloud-run'
-          image: 'eu.gcr.io/dinner-app-397715/dinnerproject-frontend'
         run: |
           gcloud run deploy dinner-frontend \
             --max-instances=1 \
