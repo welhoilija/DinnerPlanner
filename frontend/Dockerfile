@@ -11,7 +11,7 @@ RUN npm run build
 FROM nginx:alpine3.18-slim
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d/
+COPY /.nginx/nginx.conf /etc/nginx/conf.d/
 
 # Copy the production-ready build from the build environment to Nginx
 COPY --from=builder /app/build /usr/share/nginx/html
