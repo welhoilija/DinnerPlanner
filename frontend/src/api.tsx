@@ -20,7 +20,7 @@ export interface Review {
 }
 
 const instance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.REACT_APP_API_URL || "https://backend-ogfqdmlfoa-lz.a.run.app",
   timeout: 10000,
 })
 console.log(process.env.REACT_APP_API_URL)
