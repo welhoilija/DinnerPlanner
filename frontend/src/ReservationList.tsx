@@ -43,7 +43,7 @@ const ReservationList: React.FC = () => {
       await removeReservation(reservationId)
       fetchData()
     } catch (error) {
-      console.error('Error removing reservation:', error);
+      console.error('Error removing reservation:', error)
     }
   }
   
@@ -58,23 +58,29 @@ const ReservationList: React.FC = () => {
 
   const currentDate = new Date()
 
-  const futureReservations = reservations.filter(
-    reservation => new Date(reservation.datetime) >= currentDate
-  )
+  const futureReservations = reservations.filter(reservation => {
+    if (reservation && reservation.datetime) {
+      return new Date(reservation.datetime) >= currentDate
+    }
+    return false
+  })
 
-  const pastReservations = reservations.filter(
-    reservation => new Date(reservation.datetime) < currentDate
-  )
+  const pastReservations = reservations.filter(reservation => {
+    if (reservation && reservation.datetime) {
+      return new Date(reservation.datetime) < currentDate
+    }
+    return false
+  })
 
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
 
   const openReviewModal = (reservationId: number) => {
-    setIsReviewModalOpen(true);
-  };
+    setIsReviewModalOpen(true)
+  }
 
   const closeReviewModal = () => {
-    setIsReviewModalOpen(false);
-  };
+    setIsReviewModalOpen(false)
+  }
 
   const handleReviewCreated = () => {
     fetchData()
