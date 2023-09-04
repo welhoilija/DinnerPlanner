@@ -17,7 +17,7 @@ COPY /.nginx/nginx.conf /etc/nginx/conf.d/
 COPY --from=builder /app/build /usr/share/nginx/html
 
 # Expose port 80 to the outside world (if needed)
-EXPOSE 80
+EXPOSE 8080
 
 # Start Nginx to serve the production build
 CMD ["nginx", "-g", "daemon off;"]
