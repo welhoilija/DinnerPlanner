@@ -10,6 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
+    "https://dinner.tuomaskangas.com/",
+    "https://dinner.tuomaskangas.com",
     "https://frontend-ogfqdmlfoa-lz.a.run.app/",  # add these to env vars
     "https://frontend-ogfqdmlfoa-lz.a.run.app",
     "http://0.0.0.0:3000",  # or the FQDN in prod
