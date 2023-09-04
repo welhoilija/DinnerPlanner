@@ -45,5 +45,5 @@ jobs:
           gcloud run deploy frontend \
             --image=eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }} \
             --platform=managed \
-            --region=europe-north1
+            --region=europe-north1 \
             --update-env-vars REACT_APP_API_URL=https://backend-ogfqdmlfoa-lz.a.run.app
