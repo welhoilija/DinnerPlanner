@@ -10,9 +10,6 @@ DB_HOST = os.environ.get("DB_HOST") if os.environ.get("DB_HOST") else os.environ
 DB_PORT = os.environ.get("DB_PORT", "5432")
 DB_NAME = os.environ.get("DB_NAME")
 
-for key, value in os.environ.items():
-    print(f"Env Var: {key}={value}")
-
 
 def connect_database() -> sqlalchemy.engine.base.Engine:
     """Initializes a TCP connection pool for a Cloud SQL instance of Postgres."""
