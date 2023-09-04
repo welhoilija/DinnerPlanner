@@ -16,6 +16,12 @@ interface Reservation {
   reviews: Review[]
 }
 
+function StarRating(stars : number) {
+  const starIcons = '⭐'.repeat(stars);
+
+  return <span>{starIcons}</span>;
+}
+
 const ReservationList: React.FC = () => {
   const [reservations, setReservations] = useState<Reservation[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -146,8 +152,8 @@ const ReservationList: React.FC = () => {
                   {reservation.reviews.map((review: Review) => (
                     <Card key={review.reservation_id} className="m-2 bg-dark text-white">
                       <Card.Body>
-                        <Card.Text>Stars: {review.stars}</Card.Text>
-                        <Card.Text>Comment: {review.comment}</Card.Text>
+                        <Card.Text>{StarRating(review.stars)}</Card.Text>
+                        <Card.Text>{review.comment}</Card.Text>
                       </Card.Body>
                     </Card>
                   ))}
