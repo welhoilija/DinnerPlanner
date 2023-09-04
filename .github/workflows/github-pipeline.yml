@@ -25,8 +25,6 @@ jobs:
       - name: Build and push Docker images for Frontend
         working-directory: ./frontend
         run: |
-          npm install  # Install frontend dependencies
-          npm run build  # Build the frontend for production
           docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }} .
           docker push eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }}
 
@@ -46,4 +44,3 @@ jobs:
             --image=eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }} \
             --platform=managed \
             --region=europe-north1 \
-            --update-env-vars REACT_APP_API_URL=https://backend-ogfqdmlfoa-lz.a.run.app
