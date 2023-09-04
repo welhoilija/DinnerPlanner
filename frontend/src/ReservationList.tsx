@@ -67,15 +67,12 @@ const ReservationList: React.FC = () => {
   )
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [selectedReservationId, setSelectedReservationId] = useState<number | null>(null);
 
   const openReviewModal = (reservationId: number) => {
-    setSelectedReservationId(reservationId);
     setIsReviewModalOpen(true);
   };
 
   const closeReviewModal = () => {
-    setSelectedReservationId(null);
     setIsReviewModalOpen(false);
   };
 
