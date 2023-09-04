@@ -25,6 +25,8 @@ jobs:
       - name: Build and push Docker images for Frontend
         working-directory: ./frontend
         run: |
+          npm install
+          npm run build
           docker build -t eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }} .
           docker push eu.gcr.io/dinner-app-397715/dinnerproject-frontend:${{ github.sha }}
 
