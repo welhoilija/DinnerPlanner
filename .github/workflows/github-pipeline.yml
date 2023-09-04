@@ -9,9 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      REACT_APP_API_URL: https://backend-ogfqdmlfoa-lz.a.run.app
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,7 +25,7 @@ jobs:
       - name: Build and push Docker images for Frontend
         working-directory: ./frontend
         env:
-          REACT_APP_API_URL: ${{ env.REACT_APP_API_URL }}
+          REACT_APP_API_URL: https://backend-ogfqdmlfoa-lz.a.run.app
         run: |
           npm install  # Install frontend dependencies
           npm run build  # Build the frontend for production
