@@ -25,6 +25,8 @@ async def delete_reservation(request: ReservationId, db: Session = Depends(get_d
     reservation = db.query(Reservation).get(request.id)
 
     if reservation:
+        for review in reservation.reviews:
+            db.delete(review)
         db.delete(reservation)
         db.commit()
         return None
