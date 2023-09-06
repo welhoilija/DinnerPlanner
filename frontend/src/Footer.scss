@@ -1,0 +1,11 @@
+.social-links {
+    a {
+      color: #fff;
+      text-decoration: none;
+      margin-right: 15px;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
