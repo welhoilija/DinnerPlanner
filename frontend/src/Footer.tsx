@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 import './Footer.scss'
 
 interface FooterProps {
@@ -22,6 +22,7 @@ const Footer: React.FC<FooterProps> = ({ githubUrl, linkedinUrl, email }) => {
                 LinkedIn
               </a>
               <a href={mailtoLink}>Email</a>
+              <a href="https://tuomaskangas.com">Tuomaskangas.com</a>
             </div>
         </Row>
       </Container>

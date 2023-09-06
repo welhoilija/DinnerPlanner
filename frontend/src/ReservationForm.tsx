@@ -3,18 +3,23 @@ import { createReservation } from './api'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import DateTimePicker from 'react-datetime-picker'
-import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-calendar/dist/Calendar.css';
-import 'react-clock/dist/Clock.css';
-import './datetimepicker.scss';
+import 'react-datetime-picker/dist/DateTimePicker.css'
+import 'react-calendar/dist/Calendar.css'
+import 'react-clock/dist/Clock.css'
+import './datetimepicker.scss'
 interface ReservationFormProps {
   onReservationCreated: () => void
 }
 
 const ReservationForm: React.FC<ReservationFormProps> = ({ onReservationCreated }) => {
+  const date = new Date()
+  date.setMinutes(0)
+  date.setSeconds(0)
+  date.setHours(date.getHours() + 1)
+
+  const [dateTime, setDateTime] = useState<Date | null>(date)
   const [restaurantName, setRestaurantName] = useState('')
   const [description, setDescription] = useState('')
-  const [dateTime, setDateTime] = useState<Date | null>(new Date())
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
