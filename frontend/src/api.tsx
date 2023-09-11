@@ -14,6 +14,7 @@ interface ReservationsResponse {
 }
 
 export interface Review {
+  id: number | null
   reservation_id: number
   stars: number
   comment: string
@@ -23,7 +24,6 @@ const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL || "https://backend-ogfqdmlfoa-lz.a.run.app",
   timeout: 10000,
 })
-console.log(process.env.REACT_APP_API_URL)
 
 export async function fetchReservations(): Promise<Reservation[]> {
   try {
@@ -59,12 +59,24 @@ export async function removeReservation(reservationId: number): Promise<{ messag
   }
 }
 
-export async function createReview(review: Review): Promise<{ message: string }> {
+export type OmitIdReview = Omit<Review, "id">
+
+export async function createReview(review: OmitIdReview): Promise<{ message: string }> {
   try {
     const response = await instance.post('/review/', review)
     return response.data
   } catch (error) {
     console.error('Error creating review:', error)
+    throw error
+  }
+}
+
+export async function removeReview(reviewId: number): Promise<{ message: string }> {
+  try {
+    const response = await instance.delete('/review/', { data: { id: reviewId } })
+    return response.data
+  } catch (error) {
+    console.error('Error removing reservation:', error)
     throw error
   }
 }

@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
-import { createReview, Review } from './api'
+import { createReview, OmitIdReview } from './api'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
 interface ReviewFormProps {
   reservationId: number
   onReviewCreated: () => void
-  onClose: () => void
 }
 
-const ReviewForm: React.FC<ReviewFormProps> = ({ reservationId, onReviewCreated, onClose }) => {
+const ReviewForm: React.FC<ReviewFormProps> = ({ reservationId, onReviewCreated }) => {
   const [stars, setStars] = useState<number | undefined>(undefined)
   const [comment, setComment] = useState('')
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
@@ -21,14 +19,13 @@ const ReviewForm: React.FC<ReviewFormProps> = ({ reservationId, onReviewCreated,
     }
 
     try {
-      const review: Review = {
+      const review: OmitIdReview = {
         reservation_id: reservationId,
         stars: stars,
         comment: comment,
       }
       await createReview(review)
       onReviewCreated()
-      onClose()
     } catch (error) {
       console.error('Error creating review:', error)
     }

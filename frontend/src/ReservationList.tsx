@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { fetchReservations, removeReservation, Review } from './api'
+import { fetchReservations, removeReservation, removeReview, Review } from './api'
 import ReservationForm from './ReservationForm'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import './ReservationList.scss'
 import ReviewForm from './ReviewForm'
+import CloseButton from 'react-bootstrap/CloseButton'
 
 interface Reservation {
   id: number
@@ -52,6 +53,18 @@ const ReservationList: React.FC = () => {
       console.error('Error removing reservation:', error)
     }
   }
+
+  const handleRemoveReview = async (reviewId: number | null) => {
+    if (reviewId == null) {
+      return
+    }
+    try {
+      await removeReview(reviewId)
+      fetchData()
+    } catch (error) {
+      console.error('Error removing reservation:', error)
+    }
+  }
   
 
   const openModal = () => {
@@ -79,8 +92,10 @@ const ReservationList: React.FC = () => {
   })
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [reservationId, setIsreservationId] = useState(Number)
 
   const openReviewModal = (reservationId: number) => {
+    setIsreservationId(reservationId)
     setIsReviewModalOpen(true)
   }
 
@@ -150,8 +165,10 @@ const ReservationList: React.FC = () => {
                 </Card.Subtitle>
                 <div className="d-flex flex-row flex-wrap">
                   {reservation.reviews.map((review: Review) => (
-                    <Card key={review.reservation_id} className="m-2 bg-dark text-white">
+                    <Card key={review.id} className="m-2 bg-dark text-white">
                       <Card.Body>
+                      <CloseButton onClick={() => handleRemoveReview(review.id)}>
+                      </CloseButton>
                         <Card.Text>{StarRating(review.stars)}</Card.Text>
                         <Card.Text>{review.comment}</Card.Text>
                       </Card.Body>
@@ -160,7 +177,7 @@ const ReservationList: React.FC = () => {
                 </div>
                 <div className='CreateReservation'>
                   <Button variant="primary" onClick={() => openReviewModal(reservation.id)}>
-                  Write Review
+                  Write a Review
                   </Button>
                 </div>
 
@@ -170,9 +187,8 @@ const ReservationList: React.FC = () => {
                   </Modal.Header>
                   <Modal.Body>
                     <ReviewForm
-                      reservationId={reservation.id}
+                      reservationId={reservationId}
                       onReviewCreated={handleReviewCreated}
-                      onClose={closeReviewModal}
                     />
                   </Modal.Body>
                 </Modal>
