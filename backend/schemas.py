@@ -10,6 +10,14 @@ class ReservationSchema:
 
 @dataclass
 class Review:
+    id: int
+    reservation_id: int
+    stars: int
+    comment: str
+
+
+@dataclass
+class ReviewCreate:  # figure a way to exclude fields in the schema so only 1 is needed
     reservation_id: int
     stars: int
     comment: str
@@ -26,6 +34,11 @@ class ReservationList:
 
 @dataclass
 class ReservationId:
+    id: int
+
+
+@dataclass
+class ReviewId:
     id: int
 
 
