@@ -1,8 +1,10 @@
 from dataclasses import asdict
+from typing import Annotated
 
 from database import get_db
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from models.models import Reservation
+from models.models import Session as DBSession
 from models.models import Review as DBReview
 from schemas import (ReservationId, ReservationList, ReservationListResponse,
                      ReservationSchema, Review)
@@ -12,8 +14,17 @@ router = APIRouter()
 
 
 @router.post("/create_reservation/")
-async def create_reservation(request: ReservationSchema, db: Session = Depends(get_db)):
-    db_reservation = Reservation(**asdict(request))
+async def create_reservation(
+    request: ReservationSchema,
+    Authorization: Annotated[str, Header()],
+    db: Session = Depends(get_db)
+):
+    # Look up the session using the session_key
+    session = db.query(DBSession).filter_by(session_key=Authorization).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    db_reservation = Reservation(**asdict(request), session_id=session.id)
     db.add(db_reservation)
     db.commit()
     db.refresh(db_reservation)
@@ -35,8 +46,9 @@ async def delete_reservation(request: ReservationId, db: Session = Depends(get_d
 
 
 @router.get("/list_reservations/", response_model=ReservationListResponse)
-async def list_reservations(db: Session = Depends(get_db)):
-    reservations = db.query(Reservation).all()
+async def list_reservations(Authorization: Annotated[str, Header()], db: Session = Depends(get_db)):
+    session = db.query(DBSession).filter_by(session_key=Authorization).first()
+    reservations = db.query(Reservation).filter_by(session_id=session.id).all()
 
     reservation_list = []
     for res in reservations:

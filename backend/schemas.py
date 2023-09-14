@@ -1,3 +1,4 @@
+from pydantic import validator
 from pydantic.dataclasses import dataclass
 
 
@@ -40,6 +41,19 @@ class ReservationId:
 @dataclass
 class ReviewId:
     id: int
+
+
+@dataclass
+class SessionCreate:
+    session_key: str
+
+    @validator('session_key', pre=True, always=True)
+    def validate_session_key(cls, value):
+        if value is None:
+            raise ValueError('Session key cannot be None')
+        if len(value) < 1:
+            raise ValueError('Session key must be at least a character long')
+        return value
 
 
 @dataclass
