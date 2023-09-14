@@ -25,6 +25,39 @@ const instance = axios.create({
   timeout: 10000,
 })
 
+
+export function setSessionKey(key: string) {
+  localStorage.setItem('sessionKey', key)
+}
+
+export function getSessionKey(): string | null {
+  return localStorage.getItem('sessionKey') || null
+}
+
+instance.interceptors.request.use(
+  (config) => {
+    let sessionKey = getSessionKey()
+    if (sessionKey) {
+      config.headers.Authorization = sessionKey
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+export async function createOrGetSession(sessionKey: string): Promise<{ session_key: string }> {
+  try {
+    const response = await instance.post('/session/', { session_key: sessionKey })
+    setSessionKey(response.data.session_key)
+    return response.data
+  } catch (error) {
+    console.error('Error creating or getting session:', error)
+    throw error
+  }
+}
+
 export async function fetchReservations(): Promise<Reservation[]> {
   try {
     const response = await instance.get<ReservationsResponse>('/reservation/list_reservations/')

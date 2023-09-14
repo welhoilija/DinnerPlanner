@@ -1,0 +1,22 @@
+.session-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .session-form {
+    width: 50%;
+  }
+  
+  .session-input {
+    background-color: #444;
+    color: #fff;
+  }
+  
+  .session-button {
+    margin-top: 10px;
+  }
