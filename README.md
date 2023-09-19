@@ -33,10 +33,6 @@ Dinner Planner is a cool tool for managing restaurant reservations and reviews w
    git clone git@github.com:welhoilija/DinnerPlanner.git
    cd DinnerPlanner
 
-### Deployments
-
-  - The application is deployed using GitHub Actions. Check the `.github/workflows` directory for the deployment scripts. Ensure that the pipeline is correctly set up to apply database migrations using Alembic. If you encounter issues with migrations, verify that the Alembic commands are correctly specified in the deployment scripts.
-
 ### Enviroment variables
 
   ```bash
