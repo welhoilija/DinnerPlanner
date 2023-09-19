@@ -2,7 +2,6 @@ import os
 from sqlalchemy.orm import Session
 
 import sqlalchemy
-import logging
 
 DB_USER = os.environ.get("DB_USER")
 DB_PASS = os.environ.get("DB_PASS")
@@ -35,26 +34,24 @@ def connect_database() -> sqlalchemy.engine.base.Engine:
             pool_timeout=10,
             pool_recycle=1800,
         )
-        logging.warning(f"postgresql+pg8000://{DB_USER}:{DB_PASS}@/{DB_NAME}?unix_sock={DB_HOST}/.s.PGSQL.5432") # noqa E501
     else:
-        logging.warning("not using unix socket")
-        pool = sqlalchemy.create_engine(
-            # Equivalent URL:
-            # postgresql+pg8000://<db_user>:<db_pass>@<db_host>:<db_port>/<db_name>
-            sqlalchemy.engine.url.URL.create(
-                drivername="postgresql+pg8000",
-                username=DB_USER,
-                password=DB_PASS,
-                database=DB_NAME,
-                host=DB_HOST,
-                port=DB_PORT
-            ),
+        URL = sqlalchemy.engine.url.URL.create(
+            drivername="postgresql+pg8000",
+            username=DB_USER,
+            password=DB_PASS,
+            database=DB_NAME,
+            host=DB_HOST,
+            port=DB_PORT
         )
+        pool = sqlalchemy.create_engine(URL)
     return pool
 
 
+DATABASE_ENGINE = connect_database()
+
+
 def get_db():
-    db = Session(bind=connect_database())
+    db = Session(bind=DATABASE_ENGINE)
     try:
         yield db
     finally:
