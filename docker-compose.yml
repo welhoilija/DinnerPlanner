@@ -19,10 +19,10 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8080:8080"
     volumes:
       - ./backend:/app
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    command: ["./entrypoint.sh"]
     environment:
       -  DB_NAME=${DB_NAME}
       -  DB_USER=${DB_USER}
