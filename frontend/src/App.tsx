@@ -1,19 +1,26 @@
-import './App.scss'
-import Footer from './Footer'
-import ReservationList from './ReservationList'
-import SessionComponent from './SessionComponent';
-import { getSessionKey } from './api';
+import React, { useState } from "react";
+import "./App.scss";
+import Footer from "./Footer";
+import ReservationList from "./ReservationList";
+import SessionComponent from "./SessionComponent";
 
 function App() {
-  const sessionKey = getSessionKey();
+  const [currentSessionKey, setCurrentSessionKey] = useState(() => {
+    return localStorage.getItem("sessionKey") || "";
+  });
+
+  const handleSessionCreated = (sessionKey: string) => {
+    localStorage.setItem("sessionKey", sessionKey);
+    setCurrentSessionKey(sessionKey);
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        {sessionKey ? (
+        {currentSessionKey ? (
           <ReservationList />
         ) : (
-          <SessionComponent />
+          <SessionComponent onSessionCreated={handleSessionCreated} />
         )}
         <Footer
           githubUrl="https://github.com/welhoilija/"
@@ -22,7 +29,7 @@ function App() {
         />
       </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,34 +1,42 @@
-import React, { useState } from 'react'
-import { Button, Form, Spinner } from 'react-bootstrap'
-import { createOrGetSession } from './api'
+import React, { useState } from "react";
+import { Button, Form, Spinner } from "react-bootstrap";
+import { createOrGetSession } from "./api";
+import "./SessionComponent.scss";
 
-import './SessionComponent.scss' // Import the SCSS file
+type SessionComponentProps = {
+  onSessionCreated: (sessionKey: string) => void;
+};
 
-export default function SessionComponent() {
-    const [sessionKey, setSessionKey] = useState('')
-  const [isCreatingSession, setIsCreatingSession] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
+function SessionComponent({ onSessionCreated }: SessionComponentProps) {
+  const [sessionState, setSessionState] = useState({
+    sessionKey: "",
+    isLoading: false,
+    error: "",
+    successMessage: "",
+  });
 
   const handleCreateSession = async () => {
-    setIsCreatingSession(true)
-    setIsLoading(true)
+    setSessionState((prevState) => ({ ...prevState, isLoading: true }));
 
     try {
-      await createOrGetSession(sessionKey)
-      setSessionKey('')
-      setIsCreatingSession(false)
-      setIsLoading(false)
-      setSuccessMessage('Session created successfully.')
-      setError('')
+      await createOrGetSession(sessionState.sessionKey);
+      setSessionState({
+        sessionKey: "",
+        isLoading: false,
+        error: "",
+        successMessage: "Session created successfully.",
+      });
+      localStorage.setItem("sessionKey", sessionState.sessionKey);
+      onSessionCreated(sessionState.sessionKey);
     } catch (error) {
-      setIsCreatingSession(false)
-      setIsLoading(false)
-      setError('Error creating or getting session. Please try again.')
-      setSuccessMessage('')
+      setSessionState({
+        ...sessionState,
+        isLoading: false,
+        error: "Error creating or getting session. Please try again.",
+        successMessage: "",
+      });
     }
-  }
+  };
 
   return (
     <div className="session-container">
@@ -39,8 +47,10 @@ export default function SessionComponent() {
           <Form.Control
             type="text"
             placeholder="Enter session key"
-            value={sessionKey}
-            onChange={(e) => setSessionKey(e.target.value)}
+            value={sessionState.sessionKey}
+            onChange={(e) =>
+              setSessionState({ ...sessionState, sessionKey: e.target.value })
+            }
             className="session-input"
             required
           />
@@ -49,20 +59,25 @@ export default function SessionComponent() {
           variant="primary"
           type="button"
           onClick={handleCreateSession}
-          disabled={isCreatingSession || isLoading}
+          disabled={sessionState.isLoading}
           className="session-button"
         >
-          {isCreatingSession ? (
-            <Spinner animation="border" size="sm" role="status">
-            </Spinner>
+          {sessionState.isLoading ? (
+            <Spinner animation="border" size="sm" role="status"></Spinner>
           ) : (
-            'Create Session'
+            "Create Session"
           )}
         </Button>
-        {isLoading && <p>Loading...</p>}
-        {error && <p className="text-danger">{error}</p>}
-        {successMessage && <p className="text-success">{successMessage}</p>}
+        {sessionState.isLoading && <p>Loading...</p>}
+        {sessionState.error && (
+          <p className="text-danger">{sessionState.error}</p>
+        )}
+        {sessionState.successMessage && (
+          <p className="text-success">{sessionState.successMessage}</p>
+        )}
       </Form>
     </div>
-  )
+  );
 }
+
+export default SessionComponent;

@@ -1,121 +1,133 @@
-import React, { useEffect, useState } from 'react'
-import { fetchReservations, removeReservation, removeReview, Review } from './api'
-import ReservationForm from './ReservationForm'
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import './ReservationList.scss'
-import ReviewForm from './ReviewForm'
-import CloseButton from 'react-bootstrap/CloseButton'
+import React, { useEffect, useState } from "react";
+import {
+  fetchReservations,
+  removeReservation,
+  removeReview,
+  Review,
+} from "./api";
+import ReservationForm from "./ReservationForm";
+import "./ReservationList.scss";
+import { Button, Modal } from "react-bootstrap";
+import { ReservationCard } from "./ReservationCard";
+import { ReviewModal } from "./ReviewModal";
+import ErrorMessage from "./Errors";
 
-interface Reservation {
-  id: number
-  restaurant_name: string
-  datetime: string
-  description: string
-  user_id: number
-  reviews: Review[]
-}
-
-function StarRating(stars : number) {
-  const starIcons = '⭐'.repeat(stars);
-
-  return <span>{starIcons}</span>;
-}
+export type Reservation = {
+  id: number;
+  restaurant_name: string;
+  datetime: string;
+  description: string;
+  user_id: number;
+  reviews: Review[];
+};
 
 const ReservationList: React.FC = () => {
-  const [reservations, setReservations] = useState<Reservation[]>([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
-      const data = await fetchReservations()
-      setReservations(data)
+      const data = await fetchReservations();
+      setReservations(data);
     } catch (error) {
-      // Handle
+      console.error("Failed to fetch reservations:", error);
+      setErrorMessage("Failed to fetch reservations");
     }
-  }
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const handleReservationCreated = () => {
-    fetchData()
-    closeModal()
-  }
+    fetchData();
+    closeModal();
+  };
 
   const handleRemoveReservation = async (reservationId: number) => {
     try {
-      await removeReservation(reservationId)
-      fetchData()
+      await removeReservation(reservationId);
+      fetchData();
     } catch (error) {
-      console.error('Error removing reservation:', error)
+      console.error("Error removing reservation:", error);
+      setErrorMessage("Failed to remove reservation");
     }
-  }
+  };
 
   const handleRemoveReview = async (reviewId: number | null) => {
     if (reviewId == null) {
-      return
+      return;
     }
     try {
-      await removeReview(reviewId)
-      fetchData()
+      await removeReview(reviewId);
+      fetchData();
     } catch (error) {
-      console.error('Error removing reservation:', error)
+      console.error("Error removing review:", error);
+      setErrorMessage("Failed to remove review")
     }
-  }
-  
+  };
 
   const openModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const closeModal = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
-  const currentDate = new Date()
+  const currentDate = new Date();
 
-  const futureReservations = reservations.filter(reservation => {
-    if (reservation && reservation.datetime) {
-      return new Date(reservation.datetime) >= currentDate
-    }
-    return false
-  })
+  const futureReservations = reservations.filter(
+    (reservation) => new Date(reservation.datetime) >= currentDate
+  );
 
-  const pastReservations = reservations.filter(reservation => {
-    if (reservation && reservation.datetime) {
-      return new Date(reservation.datetime) < currentDate
-    }
-    return false
-  })
+  const pastReservations = reservations.filter(
+    (reservation) => new Date(reservation.datetime) < currentDate
+  );
 
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
-  const [reservationId, setIsreservationId] = useState(Number)
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reservationId, setIsreservationId] = useState<number | null>(null);
 
   const openReviewModal = (reservationId: number) => {
-    setIsreservationId(reservationId)
-    setIsReviewModalOpen(true)
-  }
+    setIsreservationId(reservationId);
+    setIsReviewModalOpen(true);
+  };
 
   const closeReviewModal = () => {
-    setIsReviewModalOpen(false)
-  }
+    setIsReviewModalOpen(false);
+  };
 
   const handleReviewCreated = () => {
-    fetchData()
-    closeReviewModal()
-  }
+    fetchData();
+    closeReviewModal();
+  };
 
   return (
     <div>
-      <div className='CreateReservation'>
+      {errorMessage && (
+        <ErrorMessage
+          message={errorMessage}
+          onClose={() => setErrorMessage(null)}
+        />
+      )}
+      <div className="session-info">
+        <span>Session Key: {localStorage.getItem("sessionKey")}</span>
+        <Button
+          variant="danger"
+          onClick={() => {
+            localStorage.removeItem("sessionKey");
+            window.location.reload();
+          }}
+        >
+          Stop Session
+        </Button>
+      </div>
+      <div className="CreateReservation">
         <Button variant="primary" onClick={openModal}>
           Create Reservation
         </Button>
       </div>
-
       <Modal show={isModalOpen} onHide={closeModal} className="modal">
         <Modal.Header closeButton>
           <Modal.Title>Create Reservation</Modal.Title>
@@ -126,79 +138,39 @@ const ReservationList: React.FC = () => {
       </Modal>
       <h2>Future Reservations</h2>
       <ul className="list-unstyled">
-        {futureReservations.map(reservation => (
+        {futureReservations.map((reservation) => (
           <li key={reservation.id}>
-            <Card bg="dark" text="white">
-              <Card.Body>
-                <Card.Title>{reservation.restaurant_name}</Card.Title>
-                <Card.Subtitle className="mb-2">
-                  Date and Time: {reservation.datetime}
-                </Card.Subtitle>
-                <Card.Text>{reservation.description}</Card.Text>
-                <Button variant="danger" onClick={() => handleRemoveReservation(reservation.id)}>
-                  Remove
-                </Button>
-              </Card.Body>
-            </Card>
+            <ReservationCard
+              reservation={reservation}
+              handleRemoveReservation={handleRemoveReservation}
+              openReviewModal={openReviewModal}
+              handleRemoveReview={handleRemoveReview}
+            />
           </li>
         ))}
       </ul>
-
       <hr />
-
       <h2>Past Reservations</h2>
       <ul className="list-unstyled">
-        {pastReservations.map(reservation => (
+        {pastReservations.map((reservation) => (
           <li key={reservation.id}>
-            <Card bg="dark" text="white">
-              <Card.Body>
-                <Card.Title>{reservation.restaurant_name}</Card.Title>
-                <Card.Subtitle className="mb-2">
-                  Date and Time: {reservation.datetime}
-                </Card.Subtitle>
-                <Card.Text>{reservation.description}</Card.Text>
-                <Button variant="danger" onClick={() => handleRemoveReservation(reservation.id)}>
-                  Remove
-                </Button>
-                <Card.Subtitle className='mb-3 p-3'>
-                  Reviews
-                </Card.Subtitle>
-                <div className="d-flex flex-row flex-wrap">
-                  {reservation.reviews.map((review: Review) => (
-                    <Card key={review.id} className="m-2 bg-dark text-white">
-                      <Card.Body>
-                      <CloseButton onClick={() => handleRemoveReview(review.id)}>
-                      </CloseButton>
-                        <Card.Text>{StarRating(review.stars)}</Card.Text>
-                        <Card.Text>{review.comment}</Card.Text>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-                <div className='CreateReservation'>
-                  <Button variant="primary" onClick={() => openReviewModal(reservation.id)}>
-                  Write a Review
-                  </Button>
-                </div>
-
-                <Modal show={isReviewModalOpen} onHide={closeReviewModal} className="modal">
-                  <Modal.Header closeButton>
-                    <Modal.Title>Write a review</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <ReviewForm
-                      reservationId={reservationId}
-                      onReviewCreated={handleReviewCreated}
-                    />
-                  </Modal.Body>
-                </Modal>
-              </Card.Body>
-            </Card>
+            <ReservationCard
+              reservation={reservation}
+              handleRemoveReservation={handleRemoveReservation}
+              openReviewModal={openReviewModal}
+              handleRemoveReview={handleRemoveReview}
+            />
           </li>
         ))}
       </ul>
+      <ReviewModal
+        isReviewModalOpen={isReviewModalOpen}
+        closeReviewModal={closeReviewModal}
+        reservationId={reservationId}
+        onReviewCreated={handleReviewCreated}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default ReservationList
+export default ReservationList;
