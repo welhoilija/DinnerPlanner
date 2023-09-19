@@ -41,6 +41,7 @@ function SessionComponent({ onSessionCreated }: SessionComponentProps) {
   return (
     <div className="session-container">
       <h2>Create or Get Session</h2>
+      <h3> Use a secret session key and share it with your friends!</h3>
       <Form onSubmit={handleCreateSession} className="session-form">
         <Form.Group controlId="sessionKey">
           <Form.Label>Session Key:</Form.Label>

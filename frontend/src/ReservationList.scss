@@ -1,28 +1,36 @@
 /* ReservationList.css */
 .card {
-    border: none;
-    border-radius: 10px;
-    background-color: #333;
-    color: #fff;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-header {
-    background-color: #222;
-    border-bottom: none;
-  }
-  
-  .card-title {
-    font-size: 1.25rem;
-    margin-bottom: 0;
-  }
-  
-  .card-body {
-    padding: 20px;
-  }
-  
-  .card-text {
-    color: #ccc;
-  }
-  
+  border: none;
+  border-radius: 10px;
+  background-color: #333;
+  color: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #222;
+  border-bottom: none;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin-bottom: 0;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-text {
+  color: #ccc;
+}
+
+.session-info {
+  display: flex;
+  width: 90%;
+  align-content: space-between;
+  justify-content: space-between;
+  margin-bottom: -25px;
+  margin: 25px;
+}

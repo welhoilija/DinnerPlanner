@@ -112,7 +112,7 @@ const ReservationList: React.FC = () => {
         />
       )}
       <div className="session-info">
-        <span>Session Key: {localStorage.getItem("sessionKey")}</span>
+        <span>Share your session key to your friends: {localStorage.getItem("sessionKey")}</span>
         <Button
           variant="danger"
           onClick={() => {
