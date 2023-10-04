@@ -1,0 +1,14 @@
+.review-card {
+    position: relative;
+    padding: 20px; /* Increase padding for more spacing */
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.star-rating {
+    margin-bottom: 10px;
+}
