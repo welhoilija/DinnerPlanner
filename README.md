@@ -2,7 +2,7 @@
 
 Dinner Planner is a cool tool for managing restaurant reservations and reviews with friends. The project is split into a frontend and backend, with a PostgreSQL to store data.
 
-## Start using
+## Test it out!
 
   To start using the tool, head to https://dinner.tuomaskangas.com
   and enter a session key to start managing reservations. Share the session key with friends you'd like to eat with!
