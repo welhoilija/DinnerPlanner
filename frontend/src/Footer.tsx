@@ -1,11 +1,11 @@
-import React from 'react'
-import { Container, Row } from 'react-bootstrap'
-import './Footer.scss'
+import React from "react";
+import { Container, Row } from "react-bootstrap";
+import "./Footer.scss";
 
 interface FooterProps {
-  githubUrl: string
-  linkedinUrl: string
-  email: string
+  githubUrl: string;
+  linkedinUrl: string;
+  email: string;
 }
 
 const Footer: React.FC<FooterProps> = ({ githubUrl, linkedinUrl, email }) => {
@@ -14,20 +14,20 @@ const Footer: React.FC<FooterProps> = ({ githubUrl, linkedinUrl, email }) => {
     <footer className="bg-dark text-light">
       <Container>
         <Row className="social-links">
-            <div >
-              <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-                GitHub
-              </a>
-              <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
-                LinkedIn
-              </a>
-              <a href={mailtoLink}>Email</a>
-              <a href="https://tuomaskangas.com">Tuomaskangas.com</a>
-            </div>
+          <div>
+            <a href={githubUrl} target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+            <a href={mailtoLink}>Email</a>
+            <a href="https://tuomaskangas.com">Tuomaskangas.com</a>
+          </div>
         </Row>
       </Container>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
