@@ -113,6 +113,9 @@ const ReservationList: React.FC = () => {
       )}
       <div className="session-info">
         <span>Share your session key to your friends: {localStorage.getItem("sessionKey")}</span>
+        <Button variant="primary" onClick={openModal}>
+          Create Reservation
+        </Button>
         <Button
           variant="danger"
           onClick={() => {
@@ -123,11 +126,6 @@ const ReservationList: React.FC = () => {
           Stop Session
         </Button>
       </div>
-      <div className="CreateReservation">
-        <Button variant="primary" onClick={openModal}>
-          Create Reservation
-        </Button>
-      </div>
       <Modal show={isModalOpen} onHide={closeModal} className="modal">
         <Modal.Header closeButton>
           <Modal.Title>Create Reservation</Modal.Title>
@@ -136,19 +134,24 @@ const ReservationList: React.FC = () => {
           <ReservationForm onReservationCreated={handleReservationCreated} />
         </Modal.Body>
       </Modal>
-      <h2>Future Reservations</h2>
-      <ul className="list-unstyled">
-        {futureReservations.map((reservation) => (
-          <li key={reservation.id}>
-            <ReservationCard
-              reservation={reservation}
-              handleRemoveReservation={handleRemoveReservation}
-              openReviewModal={openReviewModal}
-              handleRemoveReview={handleRemoveReview}
-            />
-          </li>
-        ))}
-      </ul>
+      {futureReservations.length > 0 && 
+        <div>
+          <h2>Future Reservations</h2>
+          <ul className="list-unstyled">
+            {futureReservations.map((reservation) => (
+              <li key={reservation.id}>
+                <ReservationCard
+                  reservation={reservation}
+                  handleRemoveReservation={handleRemoveReservation}
+                  openReviewModal={openReviewModal}
+                  handleRemoveReview={handleRemoveReview}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+      }
+      
       <hr />
       <h2>Past Reservations</h2>
       <ul className="list-unstyled">
