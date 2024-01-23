@@ -4,10 +4,7 @@ Dinner Planner is a cool tool for managing restaurant reservations and reviews w
 
 ## Test it out!
 
-  To start using the tool, head to https://dinner.tuomaskangas.com
-  and enter a session key to start managing reservations. Share the session key with friends you'd like to eat with!
-
-  The application is not intended for sensitive information.
+  The application is not intended for storing sensitive information.
 
 ## Technologies Used
 
